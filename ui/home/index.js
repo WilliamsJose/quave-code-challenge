@@ -1,6 +1,9 @@
 import { Autocomplete, Divider, TextField } from '@mui/material';
 import React from 'react';
 import { BoxDataGrid } from '../component/datagrid/BoxDataGrid';
+import { People } from '../../people/people';
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 
 const options = [
   { label: 'test', id: 1 },
@@ -64,19 +67,33 @@ const rows = [
   { id: 6, fullName: 'Maria Carla', company: 'Green Group', title: 'UX/UI', checkIn: '30/21/24 14:15', checkOut: '30/21/24 16:45' },
 ];
 
-export const Home = () => (
-  <div className="mx-auto text-center max-w-md">
-    <Divider className="mt-2 mb-2" />
-    <Autocomplete
-      className="mt-4 mb-2"
-      disablePortal
-      id="combo-box"
-      options={options}
-      renderInput={(params) => <TextField {...params} label="Select an event" />}
-    />
-    <p className="mt-2 w-full bg-slate-300 rounded p-1">People in event right now: {peopleInEvent}</p>
-    <p className="mt-2 w-full bg-slate-300 rounded p-1">People not checked in: {peopleNotCheckedIn}</p>
-    <p className="mt-2 w-full bg-slate-300 rounded p-1">People by Company right now: {joinGroupsStr}</p>
-    <BoxDataGrid columns={columns} rows={rows} key="box-data-grid" classes="mt-4" />
-  </div>
-);
+export const Home = () => {
+  const newPerson = useTracker(() => {
+    const handle = Meteor.subscribe('people');
+    const loading = !handle.ready();
+    const person = People.findOne({ firstName: 'Carl' });
+    console.log(person);
+    return {
+      person,
+      loading,
+    };
+  });
+
+  return (
+    <div className="mx-auto text-center max-w-md">
+      <Divider className="mt-2 mb-2" />
+      {newPerson.loading ? 'loading' : newPerson.person.firstName}
+      <Autocomplete
+        className="mt-4 mb-2"
+        disablePortal
+        id="combo-box"
+        options={options}
+        renderInput={(params) => <TextField {...params} label="Select an event" />}
+      />
+      <p className="mt-2 w-full bg-slate-300 rounded p-1">People in this event right now: {peopleInEvent}</p>
+      <p className="mt-2 w-full bg-slate-300 rounded p-1">People not checked in: {peopleNotCheckedIn}</p>
+      <p className="mt-2 w-full bg-slate-300 rounded p-1">People by Company in this event right now: {joinGroupsStr}</p>
+      <BoxDataGrid columns={columns} rows={rows} key="box-data-grid" classes="mt-4" />
+    </div>
+  );
+};
