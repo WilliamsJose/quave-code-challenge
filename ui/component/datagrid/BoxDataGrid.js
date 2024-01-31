@@ -15,8 +15,6 @@ export const BoxDataGrid = ({ rows, columns, classes }) => (
         },
       }}
       pageSizeOptions={[5]}
-      checkboxSelection
-      disableRowSelectionOnClick
     />
   </Box>
 );

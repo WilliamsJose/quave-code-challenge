@@ -1,59 +1,60 @@
-import { Autocomplete, Divider, TextField } from '@mui/material';
+import { Autocomplete, Button, Divider, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BoxDataGrid } from '../component/datagrid/BoxDataGrid';
 import { useFindPeopleBy, useFindCommunitiesBy } from '../hook';
 
-const peopleInEvent = 18;
-const groups = [
-  { name: 'green group', count: 10 },
-  { name: 'hoppe group', count: 5 },
-  { name: 'hoppe group', count: 5 },
-  { name: 'hoppe group', count: 5 },
-  { name: 'hoppe group', count: 5 },
-];
-const joinGroupsStr = groups.map(group => `${group.name} (${group.count})`).join(', ');
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'fullName',
-    headerName: 'Name',
-    width: 160,
-    editable: false,
-  },
-  {
-    field: 'company',
-    headerName: 'Company',
-    width: 160,
-    editable: false,
-  },
-  {
-    field: 'title',
-    headerName: 'Title',
-    width: 160,
-    editable: false,
-  },
-  {
-    field: 'checkIn',
-    headerName: 'Check-in',
-    type: 'Date',
-    width: 160,
-    editable: false,
-  },
-  {
-    field: 'checkOut',
-    headerName: 'Check-out',
-    type: 'Date',
-    width: 160,
-    editable: false,
-  },
-];
-
 export const Home = () => {
   const [options, setOptions] = useState([]);
   const [rows, setRows] = useState([]);
-  const [selectedCommunity, setSelectedCommunity] = useState({})
-  const [peopleLoading, peopleFound] = useFindPeopleBy(selectedCommunity)
+  const [selectedCommunity, setSelectedCommunity] = useState({});
+  const [peopleLoading, peopleFound] = useFindPeopleBy(selectedCommunity);
   const [communitiesLoading, communitiesFound] = useFindCommunitiesBy();
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'fullName',
+      headerName: 'Name',
+      width: 160,
+      editable: false,
+    },
+    {
+      field: 'company',
+      headerName: 'Company',
+      width: 160,
+      editable: false,
+    },
+    {
+      field: 'title',
+      headerName: 'Title',
+      width: 160,
+      editable: false,
+    },
+    {
+      field: 'checkIn',
+      headerName: 'Check-in',
+      type: 'Date',
+      width: 160,
+      editable: false,
+    },
+    {
+      field: 'checkOut',
+      headerName: 'Check-out',
+      type: 'Date',
+      width: 160,
+      editable: false,
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 120,
+      renderCell: (params) => (
+        params.row.checkOut === 'N/A' ?
+        <Button variant='contained' onClick={() => handleClick(params.row)}>
+          {params.row.checkIn === 'N/A' ? 'Check In' : 'Check Out'}
+        </Button> : undefined
+      ),
+    },
+  ];
   
   function setCommunities(communities) {
     setOptions(
@@ -80,13 +81,13 @@ export const Home = () => {
 
   console.log('home reloaded');
 
-  const handleSelected = (event, selected) => {
+  const handleSelectedEvent = (event, selected) => {
     event.preventDefault();
-    if (selected) {
-      setSelectedCommunity({ communityId: selected.id });
-    } else {
-      setSelectedCommunity({})
-    }
+    setSelectedCommunity(selected ? { communityId: selected.id } : {});
+  }
+
+  const handleClick = (row) => {
+    console.log(row)
   }
 
   useEffect(() => {
@@ -109,13 +110,13 @@ export const Home = () => {
         disablePortal
         id="combo-box"
         options={options}
-        onChange={handleSelected}
+        onChange={handleSelectedEvent}
         renderInput={(params) => <TextField {...params} label={communitiesLoading ? 'loading' : 'Select an event'} />}
       />
-      <p className="mt-2 w-full bg-slate-300 rounded p-1">People in this event right now: {peopleInEvent}</p>
+      <p className="mt-2 w-full bg-slate-300 rounded p-1">People in this event right now: {0}</p>
       <p className="mt-2 w-full bg-slate-300 rounded p-1">People not checked in: {rows.length}</p>
-      <p className="mt-2 w-full bg-slate-300 rounded p-1">People by Company in this event right now: {joinGroupsStr}</p>
-      <BoxDataGrid columns={columns} rows={rows} key="box-data-grid" classes="mt-4" />
+      <p className="mt-2 w-full bg-slate-300 rounded p-1">People by Company in this event right now: {0}</p>
+      <BoxDataGrid columns={columns} rows={rows} classes="mt-4" />
     </div>
   );
 };
