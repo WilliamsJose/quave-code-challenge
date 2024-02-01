@@ -2,13 +2,14 @@ import { Autocomplete, Button, Divider, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BoxDataGrid } from '../component/datagrid/BoxDataGrid';
 import { useFindPeopleBy, useFindCommunitiesBy } from '../hook';
+import { EventSelector } from '../component/selector/EventSelector';
 
 export const Home = () => {
-  const [options, setOptions] = useState([]);
-  const [rows, setRows] = useState([]);
   const [selectedCommunity, setSelectedCommunity] = useState({});
+  const [rows, setRows] = useState([]);
+  
   const [peopleLoading, peopleFound] = useFindPeopleBy(selectedCommunity);
-  const [communitiesLoading, communitiesFound] = useFindCommunitiesBy();
+
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
@@ -56,13 +57,6 @@ export const Home = () => {
     },
   ];
   
-  function setCommunities(communities) {
-    setOptions(
-      communities.reduce((acc, community) => (
-        [{ label: community.name, id: community._id }, ...acc]
-      ), [])
-    );
-  }
 
   function setPeople(people) {
     setRows(
@@ -81,20 +75,11 @@ export const Home = () => {
 
   console.log('home reloaded');
 
-  const handleSelectedEvent = (event, selected) => {
-    event.preventDefault();
-    setSelectedCommunity(selected ? { communityId: selected.id } : {});
-  }
-
   const handleClick = (row) => {
     console.log(row)
   }
 
-  useEffect(() => {
-    if (!communitiesLoading) {
-      setCommunities(communitiesFound)
-    }
-  }, [communitiesLoading]);
+  
 
   useEffect(() => {
     if (!peopleLoading) {
@@ -105,14 +90,7 @@ export const Home = () => {
   return (
     <div className="mx-auto text-center max-w-2xl">
       <Divider className="mt-2 mb-2" />
-      <Autocomplete
-        className="mt-4 mb-2"
-        disablePortal
-        id="combo-box"
-        options={options}
-        onChange={handleSelectedEvent}
-        renderInput={(params) => <TextField {...params} label={communitiesLoading ? 'loading' : 'Select an event'} />}
-      />
+      <EventSelector setSelectedCommunity={setSelectedCommunity} />
       <p className="mt-2 w-full bg-slate-300 rounded p-1">People in this event right now: {0}</p>
       <p className="mt-2 w-full bg-slate-300 rounded p-1">People not checked in: {rows.length}</p>
       <p className="mt-2 w-full bg-slate-300 rounded p-1">People by Company in this event right now: {0}</p>
