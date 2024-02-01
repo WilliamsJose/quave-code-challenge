@@ -1,7 +1,7 @@
-import { Autocomplete, Button, Divider, TextField } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { BoxDataGrid } from '../component/datagrid/BoxDataGrid';
-import { useFindPeopleBy, useFindCommunitiesBy } from '../hook';
+import { useFindPeopleBy } from '../hook';
 import { EventSelector } from '../component/selector/EventSelector';
 
 export const Home = () => {
