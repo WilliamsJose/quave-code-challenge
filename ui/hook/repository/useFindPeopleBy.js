@@ -1,5 +1,5 @@
 import { useTracker } from 'meteor/react-meteor-data';
-import { People } from '../../people/people';
+import { People } from '../../../people/people';
 
 export const useFindPeopleBy = search => {
   return useTracker(() => {

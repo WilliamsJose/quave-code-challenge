@@ -1,5 +1,5 @@
 import { useTracker } from 'meteor/react-meteor-data';
-import { Communities } from '../../communities/communities';
+import { Communities } from '../../../communities/communities';
 
 export const useFindCommunitiesBy = search => {
   return useTracker(() => {
