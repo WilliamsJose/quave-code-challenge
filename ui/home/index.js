@@ -3,19 +3,18 @@ import React, { useState } from 'react';
 import { PeopleTable } from '../component/datagrid/PeopleTable';
 import { EventSelector } from '../component/selector/EventSelector';
 import { EventDisplay } from '../component/display/EventDisplay';
+import { Conteiner } from '../component/conteiner/Conteiner';
 
 export const Home = () => {
+  // to share state between components, maybe an lib can do better
   const [selectedCommunity, setSelectedCommunity] = useState({});
 
-  // eslint-disable-next-line no-console
-  console.log('home reloaded');
-
   return (
-    <div className="mx-auto text-center max-w-2xl">
-      <Divider className="mt-2 mb-2" />
+    <Conteiner>
+      <Divider className="mt-4 mb-2" />
       <EventSelector setSelectedCommunity={setSelectedCommunity} />
       <EventDisplay />
-      <PeopleTable classes="mt-4" community={selectedCommunity} />
-    </div>
+      <PeopleTable community={selectedCommunity} />
+    </Conteiner>
   );
 };
