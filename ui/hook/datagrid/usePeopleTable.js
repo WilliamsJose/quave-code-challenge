@@ -48,8 +48,12 @@ export const usePeopleTable = (community) => {
   ];
 
   const isRowCheckIn = (row) => {
-    const timeCheckIn = new Date(row.checkIn !== 'N/A' ? row.checkIn : 0);
-    const timeCheckOut = new Date(row.checkOut  !== 'N/A' ? row.checkOut  : 0);
+    let timeCheckIn = new Date(row.checkIn);
+    timeCheckIn = !isNaN(timeCheckIn.valueOf()) ? timeCheckIn : new Date(0);
+    
+    let timeCheckOut = new Date(row.checkOut);
+    timeCheckOut = !isNaN(timeCheckOut.valueOf()) ? timeCheckOut : new Date(0);
+    
     return timeCheckIn <= timeCheckOut;
   }
 
@@ -66,6 +70,7 @@ export const usePeopleTable = (community) => {
     })
   };
 
+  // here i should have to get checkIn and checkOut from another collection/Table and map
   const setPeople = (people) => {
     setRows(
       people.reduce((acc, person) => (
