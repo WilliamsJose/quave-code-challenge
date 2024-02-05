@@ -1,24 +1,26 @@
 import { Divider } from '@mui/material';
-import React from 'react';
+import React, { memo, useState } from 'react';
 import { PeopleTable } from '../component/datagrid/PeopleTable';
 import { EventSelector } from '../component/selector/EventSelector';
 import { EventPeopleCounter } from '../component/display/EventPeopleCounter';
 import { Conteiner } from '../component/conteiner/Conteiner';
-import { useGlobalState } from '../hook/shared/globalState';
+import { HomeContext } from '../hook/context/HomeContext';
 
-export const Home = () => {
-  // to share state between components, maybe an lib can do better, like redux
-  const [globalState, setGlobalState] = useGlobalState({});
+export const Home = memo(() => {
+  const [homeState, setHomeState] = useState({});
+
+  const updateHomeState = (newState) => {
+    setHomeState(newState);
+  };
 
   return (
     <Conteiner>
-      <Divider className="mt-4 mb-2" />
-      <EventSelector setGlobalState={setGlobalState} globalState={globalState} />
-      <EventPeopleCounter
-        peopleByEvent={globalState.peopleByEvent}
-        peopleNotCheckedIn={globalState.peopleNotCheckedIn}
-        peopleByGroup={globalState.peopleByGroup} />
-      <PeopleTable setGlobalState={setGlobalState} globalState={globalState} />
+      <HomeContext.Provider value={{ homeState, updateHomeState }}>
+        <Divider className="mt-4 mb-2" />
+        <EventSelector />
+        <EventPeopleCounter />
+        <PeopleTable />
+      </HomeContext.Provider>
     </Conteiner>
   );
-};
+});

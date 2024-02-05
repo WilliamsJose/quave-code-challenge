@@ -3,8 +3,8 @@ import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { usePeopleTable } from '../../hook/datagrid/usePeopleTable';
 
-export const PeopleTable = ({ setGlobalState, globalState, ...styles }) => {
-  const { columns, rows } = usePeopleTable(setGlobalState, globalState);
+export const PeopleTable = ({ ...styles }) => {
+  const { columns, rows } = usePeopleTable();
   return (
     <Box className={`mt-4 ${styles}`}>
       <DataGrid
