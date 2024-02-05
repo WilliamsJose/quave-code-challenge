@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useFindCommunitiesBy } from '../repository/useFindCommunitiesBy';
 
-export const useEventSelector = (setSelectedCommunity) => {
+export const useEventSelector = (setGlobalState, globalState) => {
   const [communitiesLoading, communitiesFound] = useFindCommunitiesBy();
     const [options, setOptions] = useState([]);
 
     const handleSelectedEvent = (event, selected) => {
       event.preventDefault();
-      setSelectedCommunity(selected ? { communityId: selected.id } : {});
+      setGlobalState(selected ? { ...globalState, selectedCommunity: { communityId: selected.id } } : { ...globalState, selectedCommunity: {} });
     };
 
     const setCommunities = (communities) => {

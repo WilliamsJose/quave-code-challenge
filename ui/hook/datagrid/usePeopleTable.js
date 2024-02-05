@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useFindPeopleBy } from "../repository/useFindPeopleBy";
 import { GridButton } from "../../component/datagrid/GridButton";
 
-export const usePeopleTable = (community) => {
-  const [peopleLoading, peopleFound] = useFindPeopleBy(community);
+export const usePeopleTable = (setGlobalState, globalState) => {
+  const [peopleLoading, peopleFound] = useFindPeopleBy(globalState.selectedCommunity);
   const [rows, setRows] = useState([]);
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -70,6 +70,30 @@ export const usePeopleTable = (community) => {
     })
   };
 
+  const updatePeopleCounter = (globalState, setGlobalState, rows) => {
+    const peopleByEvent = rows.length;
+    
+    let peopleNotCheckedIn = 0;
+    
+    let peopleByGroup = rows.reduce((accumulator, currentRow) => {
+      const { checkIn, company } = currentRow;
+      
+      if (checkIn === 'N/A') {
+        peopleNotCheckedIn++;
+      }
+      
+      if (accumulator[company]) {
+        accumulator[company]++;
+      } else {
+        accumulator[company] = 1;
+      }
+      
+      return accumulator;
+    }, {});
+
+    setGlobalState({...globalState, peopleByEvent, peopleNotCheckedIn, peopleByGroup });
+  }
+
   // here i should have to get checkIn and checkOut from another collection/Table and map
   const setPeople = (people) => {
     setRows(
@@ -91,6 +115,10 @@ export const usePeopleTable = (community) => {
       setPeople(peopleFound);
     }
   }, [peopleLoading]);
+
+  useEffect(() => {
+    updatePeopleCounter(globalState, setGlobalState, rows);
+  }, [rows]);
 
   return {
     columns, rows
