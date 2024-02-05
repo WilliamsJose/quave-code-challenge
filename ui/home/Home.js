@@ -2,7 +2,7 @@ import { Divider } from '@mui/material';
 import React, { useState } from 'react';
 import { PeopleTable } from '../component/datagrid/PeopleTable';
 import { EventSelector } from '../component/selector/EventSelector';
-import { EventDisplay } from '../component/display/EventDisplay';
+import { EventPeopleCounter } from '../component/display/EventPeopleCounter';
 import { Conteiner } from '../component/conteiner/Conteiner';
 
 export const Home = () => {
@@ -13,7 +13,7 @@ export const Home = () => {
     <Conteiner>
       <Divider className="mt-4 mb-2" />
       <EventSelector setSelectedCommunity={setSelectedCommunity} />
-      <EventDisplay />
+      <EventPeopleCounter />
       <PeopleTable community={selectedCommunity} />
     </Conteiner>
   );

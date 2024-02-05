@@ -1,6 +1,6 @@
 import React from 'react';
 import { Texts } from '../infra/constants';
-import { Home } from './home';
+import { Home } from './home/Home';
 
 export const App = () => (
   <div>
