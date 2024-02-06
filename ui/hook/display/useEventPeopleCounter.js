@@ -3,18 +3,19 @@ import { HomeContext } from '../context/HomeContext';
 
 export const useEventPeopleCounter = () => {
   const { homeState } = useContext(HomeContext);
-  let formattedPeopleByGroup = 0;
+  const pieChartData = [];
 
   if (homeState.peopleByGroup) {
-    formattedPeopleByGroup = Object.entries(homeState.peopleByGroup).map(([group, count]) => group !== 'undefined'
-      ? `${group} (${count})`
-      : '');
-    formattedPeopleByGroup = formattedPeopleByGroup.filter(arr => arr).join(', ');
+    // I will filter group count only for chart performance purpose,
+    // but in another situation, i should call PO and talk before take a decision.
+    Object.entries(homeState.peopleByGroup).map(([group, count]) => group !== 'undefined' && count > 2
+      ? pieChartData.push({ id: group, value: count, label: group })
+      : undefined);
   }
 
   return {
     peopleByEvent: homeState.peopleByEvent,
-    peopleByGroup: formattedPeopleByGroup,
+    peopleByGroup: pieChartData,
     peopleNotCheckedIn: homeState.peopleNotCheckedIn,
   };
 };
