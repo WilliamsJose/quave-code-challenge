@@ -1,18 +1,13 @@
 import { Divider } from '@mui/material';
-import React, { memo, useState } from 'react';
+import React from 'react';
 import { PeopleTable } from '../component/datagrid/PeopleTable';
 import { EventSelector } from '../component/selector/EventSelector';
 import { EventPeopleCounter } from '../component/display/EventPeopleCounter';
 import { Conteiner } from '../component/conteiner/Conteiner';
-import { HomeContext } from '../hook/context/HomeContext';
+import { HomeContext, useHomeContext } from '../hook/context/HomeContext';
 
-export const Home = memo(() => {
-  const [homeState, setHomeState] = useState({});
-
-  const updateHomeState = (newState) => {
-    setHomeState(newState);
-  };
-
+export const Home = () => {
+  const { homeState, updateHomeState } = useHomeContext();
   return (
     <Conteiner>
       <HomeContext.Provider value={{ homeState, updateHomeState }}>
@@ -23,4 +18,4 @@ export const Home = memo(() => {
       </HomeContext.Provider>
     </Conteiner>
   );
-});
+};

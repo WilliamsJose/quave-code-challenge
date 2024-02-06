@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useFindPeopleBy } from "../repository/useFindPeopleBy";
+import { useFindPeopleBy } from "../repository";
 import { GridButton } from "../../component/datagrid/GridButton";
 import { HomeContext } from "../context/HomeContext";
 

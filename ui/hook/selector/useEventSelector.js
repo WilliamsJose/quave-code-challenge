@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useFindCommunitiesBy } from '../repository/useFindCommunitiesBy';
+import { useFindCommunitiesBy } from '../repository';
 import { HomeContext } from '../context/HomeContext';
 
 export const useEventSelector = () => {
