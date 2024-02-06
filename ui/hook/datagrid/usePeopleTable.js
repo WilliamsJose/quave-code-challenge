@@ -5,6 +5,7 @@ import { HomeContext } from "../context/HomeContext";
 
 export const usePeopleTable = () => {
   const { homeState, updateHomeState } = useContext(HomeContext);
+  // Everytime select a community, the checkedIn people will reset bcs im not saving this data yet.
   const [peopleLoading, peopleFound] = useFindPeopleBy(homeState.selectedCommunity);
   const [rows, setRows] = useState([]);
   const columns = [
@@ -64,12 +65,14 @@ export const usePeopleTable = () => {
     const currentFormattedDate = new Date().toLocaleString().slice(0, -6);
     const updateCheckInOut = isRowCheckIn(row) 
       ? { ...row, checkIn: currentFormattedDate } 
-      : { ...row, checkOut: currentFormattedDate }
+      : { ...row, checkOut: currentFormattedDate };
 
     setRows((prevRows) => {
       const clickRowId = row.id;
       return prevRows.map((row, idx) => row.id === clickRowId ? updateCheckInOut : row);
-    })
+    });
+
+    updateHomeState({ ...homeState, snack: {open: true, message: `${row.fullName} has ${isRowCheckIn(row) ? 'checked in!' : 'checked out'}`} });
   };
 
   const updatePeopleCounter = (homeState, updateHomeState, rows) => {
